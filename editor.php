@@ -38,7 +38,9 @@ class Editor
         }
 
         if ($this->is_preview) {
-            $file = $this->preview_file;
+            if (file_exists($this->preview_file)) {
+                $file = $this->preview_file;
+            }
             return;
         }
 
