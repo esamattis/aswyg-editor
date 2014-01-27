@@ -1,0 +1,140 @@
+
+$top-margin: 3em;
+
+html, body {
+    overflow: hidden;
+}
+
+div, html, body, iframe, ul, li, h1, h2, h3 {
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    font-family: monospace;
+}
+
+
+.bb-panes {
+
+    .left-pane {
+        position: absolute;
+        top: $top-margin;
+        bottom: 0px;
+        border: 1px solid black;
+    }
+
+    .right-pane {
+        position: absolute;
+        top: $top-margin;
+        bottom: 0px;
+        right: 0px;
+        border: 1px solid black;
+    }
+
+    iframe,
+    .editor-container,
+    .bb-editor,
+    .CodeMirror,
+    .bb-preview {
+        height: 100%;
+        width: 100%;
+    }
+
+    .top-border {
+        height: 20px;
+        border: 1px solid red;
+    }
+
+    .sep {
+        position: absolute;
+        top: $top-margin;
+        background-color: lightgray;
+        border: 1px solid black;
+        bottom: 0px;
+        width: 15px;
+        cursor:col-resize;
+    }
+
+}
+
+.notification {
+    display: none;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 20em;
+    color: white;
+    background-color: red;
+    z-index: 1000;
+    padding: 1em;
+}
+
+.notification .close {
+    float: right;
+}
+
+.bb-toolbar {
+    position: absolute;
+    top: 0px;
+    height: $top-margin;
+    width: 100%;
+    ul {
+        list-style: none;
+    }
+    ul li {
+        vertical-align: middle;
+        display: inline-block;
+        button {
+            height: $top-margin;
+        }
+    }
+}
+
+
+$dropdown-menu-color: black;
+
+.arrow-up {
+    margin: 0px;
+    width: 0;
+    height: 0;
+    border-left: 2em solid transparent;
+    border-right: 2em solid transparent;
+    border-bottom: 2em solid $dropdown-menu-color;
+}
+
+.bb-dropdown {
+    position: absolute;
+    z-index: 10001;
+    h1 {
+        padding: 0px;
+        font-size: 1em;
+    }
+
+    .content-wrap {
+        padding: 0.3em;
+        background-color: $dropdown-menu-color;
+    }
+
+    .content {
+        padding: 1em;
+        background-color: red;
+    }
+
+    li {
+        list-style: none;
+        button {
+            width: 100%;
+            text-align: left;
+            padding: 1em;
+        }
+    }
+    ul {
+        margin: 0px;
+    }
+
+}
+
+.bb-titleform {
+    * {
+        display: block;
+    }
+}
