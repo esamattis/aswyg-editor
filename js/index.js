@@ -69,10 +69,6 @@ toolbar.on("publish", function() {
     content.savePublic(editor.getContent());
 });
 
-toolbar.on("bold", function() {
-    alert("sad");
-});
-
 
 toolbar.on("new", function(e) {
     var d = new Dropdown({
@@ -89,6 +85,10 @@ toolbar.on("new", function(e) {
     });
 
 
+});
+
+editor.listenTo(toolbar, "all", function(eventName) {
+    editor.trigger(eventName);
 });
 
 toolbar.on("open", function(e) {

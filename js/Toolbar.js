@@ -39,6 +39,16 @@ var Toolbar = Viewmaster.extend({
                 },
 
                 {
+                    title: "Link",
+                    className: "links"
+                },
+
+                {
+                    title: "Image",
+                    className: "image"
+                },
+
+                {
                     title: "Delete",
                     className: "delete"
                 }

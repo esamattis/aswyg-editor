@@ -4,12 +4,13 @@ var _ = require("underscore");
 var Viewmaster = require("viewmaster");
 var CodeMirror = require("code-mirror/mode/markdown");
 
+var CMMD = require("./CMMD");
+
 var Editor = Viewmaster.extend({
 
     className: "bb-editor",
 
     template: require("./Editor.hbs"),
-
 
     afterTemplate: function() {
         var self = this;
@@ -24,6 +25,16 @@ var Editor = Viewmaster.extend({
             tabMode: "spaces",
 
             tabSize: 4
+        });
+
+        self.md = new CMMD(self.cm);
+
+        self.on("bold", function() {
+            self.md.bold();
+        });
+
+        self.on("italics", function() {
+            self.md.italics();
         });
 
         self.listenTo(self, "resizeend", function() {
