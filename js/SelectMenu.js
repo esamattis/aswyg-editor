@@ -48,6 +48,9 @@ var SelectMenu = Viewmaster.extend({
                     value: JSON.stringify(v)
                 };
             });
+            self._itemValues.sort(function(a, b) {
+                return a.title > b.title ? 1 : -1;
+            });
 
             self.render();
 

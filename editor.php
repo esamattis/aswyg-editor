@@ -79,19 +79,27 @@ class Editor
     private function render_pages_list_json()
     {
         $pages = array();
-        $md_pattern = '/\.md$/';
+        $page_pat = '/\.md(\.preview$|$)/';
+        $preview_pat = '/\.md\.preview$/';
 
         if ($handle = opendir(CONTENT_DIR)) {
             while (false !== ($entry = readdir($handle))) {
+                $page = array();
 
                 if ($entry === '.' && $entry === '..') continue;
                 if ($entry === '404.md') continue;
-                if (!preg_match($md_pattern, $entry)) continue;
+                if (!preg_match($page_pat, $entry)) continue;
 
-                $url = preg_replace($md_pattern, '', $entry);
+                $url = preg_replace($page_pat, '', $entry);
+                $title = $url;
+
+                if (!preg_match($preview_pat, $entry)) {
+                    $title .= " (DRAFT)";
+                }
+
                 array_push($pages, array(
                     //TODO: open the file and read the title from header
-                    'title' => $url,
+                    'title' => $title,
                     'url' => '/' . $url
                 ));
             }
