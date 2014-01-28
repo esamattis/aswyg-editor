@@ -12,65 +12,116 @@ var Toolbar = Viewmaster.extend({
         return {
             buttons: [
                 {
-                    title: "Help",
-                    className: "help fa fa-question"
-                },
-
-                {
                     title: "New",
-                    className: "new fa fa-file"
+                    liClass: "new",
+                    buttonClass: "new fa fa-file"
                 },
                 {
                     title: "Open",
-                    className: "open fa fa-folder-open"
+                    liClass: "open",
+                    buttonClass: "fa fa-folder-open"
                 },
                 {
                     title: "Save draft",
-                    className: "preview save fa fa-save"
+                    liClass: "save-draft",
+                    buttonClass: "save fa fa-save"
                 },
+
                 {
                     title: "Publish",
-                    className: "publish fa fa-cloud-upload"
-                },
-                {
-                    label: "B",
-                    title: "Bold",
-                    className: "bold"
+                    liClass: "publish",
+                    buttonClass: "fa fa-cloud-upload"
                 },
 
                 {
-                    title: "Italics",
-                    className: "italics fa fa-italic"
-                },
-
-                {
-                    title: "List",
-                    className: "list fa fa-list"
-                },
-
-                {
-                    title: "Numbered list",
-                    className: "list fa fa-list-ol"
-                },
-
-                {
-                    title: "Link",
-                    className: "links fa fa-link"
-                },
-
-                {
-                    title: "Image",
-                    className: "image fa fa-camera"
+                    title: "Preview in external window",
+                    liClass: "preview",
+                    buttonClass: "fa fa-share-square-o"
                 },
 
                 {
                     title: "Delete",
-                    className: "delete fa fa-trash-o"
+                    liClass: "delete",
+                    buttonClass: "fa fa-trash-o"
+                },
+
+                {
+                    label: "H1",
+                    title: "Heading 1",
+                    liClass: "heading1",
+                },
+
+                {
+                    label: "H2",
+                    title: "Heading 2",
+                    liClass: "heading2",
+                },
+
+                {
+                    label: "H3",
+                    title: "Heading 3",
+                    liClass: "heading3",
+                },
+
+                {
+                    title: "Bold",
+                    liClass: "bold",
+                    buttonClass: "fa fa-bold"
+                },
+
+                {
+                    title: "Italics",
+                    liClass: "italics",
+                    buttonClass: "fa fa-italic"
+                },
+
+                {
+                    title: "Strikethrough",
+                    liClass: "strikethrough",
+                    buttonClass: "fa fa-strikethrough"
+                },
+
+                {
+                    title: "List",
+                    liClass: "list",
+                    buttonClass: "fa fa-list"
+                },
+
+                {
+                    title: "Numbered list",
+                    liClass: "list",
+                    buttonClass: "fa fa-list-ol"
+                },
+
+                {
+                    title: "Table",
+                    liClass: "table",
+                    buttonClass: "fa fa-table"
+                },
+
+                {
+                    title: "Link",
+                    liClass: "links",
+                    buttonClass: "fa fa-link"
+                },
+
+                {
+                    title: "Image",
+                    liClass: "image",
+                    buttonClass: "fa fa-camera"
+                },
+
+
+                {
+                    title: "Help",
+                    liClass: "help",
+                    buttonClass: "fa fa-question"
                 },
 
                 {
                     title: "Logout",
-                    className: "open fa fa-sign-out"
+                    liClass: "logout",
+                    buttonClass: "fa fa-sign-out"
                 }
 
             ]
