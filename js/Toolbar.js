@@ -12,24 +12,25 @@ var Toolbar = Viewmaster.extend({
         return {
             buttons: [
                 {
-                    label: "new",
+                    title: "Help",
+                    className: "help fa fa-question"
+                },
+
+                {
                     title: "New",
-                    className: "new"
+                    className: "new fa fa-file"
                 },
                 {
-                    label: "open",
                     title: "Open",
-                    className: "open"
+                    className: "open fa fa-folder-open"
                 },
                 {
-                    label: "save",
-                    title: "Draft",
-                    className: "preview"
+                    title: "Save draft",
+                    className: "preview save fa fa-save"
                 },
                 {
-                    label: "publish",
                     title: "Publish",
-                    className: "publish"
+                    className: "publish fa fa-cloud-upload"
                 },
                 {
                     label: "B",
@@ -38,34 +39,40 @@ var Toolbar = Viewmaster.extend({
                 },
 
                 {
-                    label: "I",
                     title: "Italics",
-                    className: "italics"
+                    className: "italics fa fa-italic"
                 },
 
                 {
-                    label: "link",
+                    title: "List",
+                    className: "list fa fa-list"
+                },
+
+                {
+                    title: "Numbered list",
+                    className: "list fa fa-list-ol"
+                },
+
+                {
                     title: "Link",
-                    className: "links"
+                    className: "links fa fa-link"
                 },
 
                 {
-                    label: "img",
                     title: "Image",
-                    className: "image"
+                    className: "image fa fa-camera"
                 },
 
                 {
-                    label: "del",
                     title: "Delete",
-                    className: "delete"
+                    className: "delete fa fa-trash-o"
                 },
 
                 {
-                    label: "?",
-                    title: "Help",
-                    className: "help"
+                    title: "Logout",
+                    className: "open fa fa-sign-out"
                 }
+
             ]
         };
     },
