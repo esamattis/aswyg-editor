@@ -44,6 +44,10 @@ var Panes = Viewmaster.extend({
     },
 
     _setPos: function(x) {
+        var margin = 50;
+        x = Math.max(x, margin);
+        x = Math.min(x, $(window.document).width() - margin);
+
         this.$left.css("width", x + "px");
         this.$sep.css("left", x + "px");
         this.$right.css("left", x + this.$sep.width() + "px");
