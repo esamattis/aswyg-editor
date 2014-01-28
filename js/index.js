@@ -1,4 +1,6 @@
 
+require("../scss/app.scss");
+
 var SITE_ROOT = "";
 
 var Promise = require("bluebird");

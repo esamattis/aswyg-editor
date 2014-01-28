@@ -6,7 +6,6 @@
   "dependencies": {
     "code-mirror": "~3.21.0",
     "underscore": "~1.5.2",
-    "epiceditor": "~0.2.0",
     "jquery": "~2.1.0",
     "watchify": "~0.5.4",
     "backbone": "~1.1.0",
@@ -14,9 +13,7 @@
     "hbsfy": "~1.3.1",
     "viewmaster": "~1.2.1",
     "bluebird": "~1.0.0",
-    "gulp": "~3.5.0",
-    "gulp-sass": "~0.6.0",
-    "gulp-browserify": "~0.3.4"
+    "sassify": "~0.1.2"
   },
   "devDependencies": {},
   "scripts": {
