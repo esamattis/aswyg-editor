@@ -1,5 +1,5 @@
 
-$top-margin: 3em;
+$top-margin: 4em;
 
 html, body {
     overflow: hidden;
@@ -15,11 +15,13 @@ div, html, body, iframe, ul, li, h1, h2, h3 {
 
 .bb-panes {
 
+    .left-pane, .right-pane, .sep {
+        border-top: 1px solid lightgray;
+    }
     .left-pane {
         position: absolute;
         top: $top-margin;
         bottom: 0px;
-        border: 1px solid black;
     }
 
     .right-pane {
@@ -27,7 +29,6 @@ div, html, body, iframe, ul, li, h1, h2, h3 {
         top: $top-margin;
         bottom: 0px;
         right: 0px;
-        border: 1px solid black;
     }
 
     iframe,
@@ -39,19 +40,17 @@ div, html, body, iframe, ul, li, h1, h2, h3 {
         width: 100%;
     }
 
-    .top-border {
-        height: 20px;
-        border: 1px solid red;
-    }
-
     .sep {
         position: absolute;
         top: $top-margin;
-        background-color: lightgray;
-        border: 1px solid black;
+        // border: 1px solid black;
         bottom: 0px;
-        width: 15px;
+        width: 10px;
         cursor:col-resize;
+
+        $bg: #D1D1D1;
+        background: lightgray;
+        background: linear-gradient(to right, $bg 0%,#ffffff 45%,#ffffff 55%,$bg 100%);
     }
 
 }
@@ -79,14 +78,40 @@ div, html, body, iframe, ul, li, h1, h2, h3 {
     width: 100%;
     ul {
         list-style: none;
+        height: 100%;
+        display: table;
     }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .italics {
+        font-style: italic;
+    }
+
     ul li {
+        display: table-cell;
         vertical-align: middle;
-        display: inline-block;
         button {
-            height: $top-margin;
+            padding: 0px;
+            height: 3.5em;
+            width: 3.5em;
+            background-color: transparent;
+            border: 0px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            &:hover {
+                border: 1px solid lightgray;
+                // background-color: white;
+            }
         }
     }
+
+    // $bg: #e0e0de;
+    $bg: #EDEDED;
+    background: $bg;
+    // background: linear-gradient(to bottom, $bg 0%,#ffffff 20%,#ffffff 80%,$bg 100%);
 }
 
 

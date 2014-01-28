@@ -1,7 +1,6 @@
 
 var $ = require("jquery");
 var Viewmaster = require("viewmaster");
-var Dropdown = require("./Dropdown");
 
 var Toolbar = Viewmaster.extend({
 
@@ -13,44 +12,59 @@ var Toolbar = Viewmaster.extend({
         return {
             buttons: [
                 {
+                    label: "new",
                     title: "New",
                     className: "new"
                 },
                 {
+                    label: "open",
                     title: "Open",
                     className: "open"
                 },
                 {
-                    title: "Preview",
+                    label: "save",
+                    title: "Draft",
                     className: "preview"
                 },
                 {
+                    label: "publish",
                     title: "Publish",
                     className: "publish"
                 },
                 {
+                    label: "B",
                     title: "Bold",
                     className: "bold"
                 },
 
                 {
+                    label: "I",
                     title: "Italics",
                     className: "italics"
                 },
 
                 {
+                    label: "link",
                     title: "Link",
                     className: "links"
                 },
 
                 {
+                    label: "img",
                     title: "Image",
                     className: "image"
                 },
 
                 {
+                    label: "del",
                     title: "Delete",
                     className: "delete"
+                },
+
+                {
+                    label: "?",
+                    title: "Help",
+                    className: "help"
                 }
             ]
         };
