@@ -91,7 +91,6 @@ div, html, body, iframe, ul, li, h1, h2, h3 {
         border-left: 1px solid lightgray;
     }
 
-
     ul li {
         display: table-cell;
         vertical-align: middle;
@@ -115,6 +114,18 @@ div, html, body, iframe, ul, li, h1, h2, h3 {
     $bg: #EDEDED;
     background: $bg;
     // background: linear-gradient(to bottom, $bg 0%,#ffffff 20%,#ffffff 80%,$bg 100%);
+}
+
+@media (max-width: 55em) {
+    .bb-toolbar button {
+        font-size: 0.7em;
+    }
+}
+
+@media (min-width: 65em) {
+    .bb-toolbar button {
+        font-size: 1em;
+    }
 }
 
 
