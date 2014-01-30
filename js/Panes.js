@@ -19,6 +19,7 @@ var Panes = Viewmaster.extend({
             "left": "0px",
             "right": "0px",
             "z-index": "10000",
+            "cursor": "col-resize"
         });
 
     },
