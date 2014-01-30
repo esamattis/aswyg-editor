@@ -13,114 +13,114 @@ var Toolbar = Viewmaster.extend({
             buttons: [
                 {
                     title: "New",
-                    liClass: "new",
+                    action: "new",
                     buttonClass: "new fa fa-file"
                 },
                 {
                     title: "Open",
-                    liClass: "open",
+                    action: "open",
                     buttonClass: "fa fa-folder-open"
                 },
                 {
                     title: "Save draft",
-                    liClass: "save-draft",
-                    buttonClass: "save fa fa-save"
+                    action: "save",
+                    buttonClass: "fa fa-save"
                 },
 
                 {
                     title: "Publish",
-                    liClass: "publish",
+                    action: "publish",
                     buttonClass: "fa fa-cloud-upload"
                 },
 
                 {
                     title: "Preview in external window",
-                    liClass: "preview",
+                    action: "preview",
                     buttonClass: "fa fa-share-square-o"
                 },
 
                 {
                     title: "Delete",
-                    liClass: "delete",
+                    action: "delete",
                     buttonClass: "fa fa-trash-o"
                 },
 
                 {
                     label: "H1",
                     title: "Heading 1",
-                    liClass: "heading1",
+                    action: "heading1",
                 },
 
                 {
                     label: "H2",
                     title: "Heading 2",
-                    liClass: "heading2",
+                    action: "heading2",
                 },
 
                 {
                     label: "H3",
                     title: "Heading 3",
-                    liClass: "heading3",
+                    action: "heading3",
                 },
 
                 {
                     title: "Bold",
-                    liClass: "bold",
+                    action: "bold",
                     buttonClass: "fa fa-bold"
                 },
 
                 {
                     title: "Italics",
-                    liClass: "italics",
+                    action: "italics",
                     buttonClass: "fa fa-italic"
                 },
 
                 {
                     title: "Strikethrough",
-                    liClass: "strikethrough",
+                    action: "strikethrough",
                     buttonClass: "fa fa-strikethrough"
                 },
 
                 {
                     title: "List",
-                    liClass: "list",
+                    action: "list",
                     buttonClass: "fa fa-list"
                 },
 
                 {
                     title: "Numbered list",
-                    liClass: "list",
+                    action: "list",
                     buttonClass: "fa fa-list-ol"
                 },
 
                 {
                     title: "Table",
-                    liClass: "table",
+                    action: "table",
                     buttonClass: "fa fa-table"
                 },
 
                 {
                     title: "Link",
-                    liClass: "links",
+                    action: "links",
                     buttonClass: "fa fa-link"
                 },
 
                 {
                     title: "Image",
-                    liClass: "image",
+                    action: "image",
                     buttonClass: "fa fa-camera"
                 },
 
 
                 {
                     title: "Help",
-                    liClass: "help",
+                    action: "help",
                     buttonClass: "fa fa-question"
                 },
 
                 {
                     title: "Logout",
-                    liClass: "logout",
+                    action: "logout",
                     buttonClass: "fa fa-sign-out"
                 }
 
@@ -130,7 +130,7 @@ var Toolbar = Viewmaster.extend({
 
     events: {
         "click button": function(e) {
-            this.trigger($(e.target).data("class"), e);
+            this.trigger($(e.target).data("action"), e);
 
         }
     }

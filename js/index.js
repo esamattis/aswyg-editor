@@ -1,118 +1,71 @@
 
-require("../scss/app.scss");
-
-var SITE_ROOT = "";
-
-var Promise = require("bluebird");
-Promise.longStackTraces();
-var $ = require("jquery");
-var Backbone = require("backbone");
-Backbone.$ = $;
-
+var SplitEdit = require("./SplitEdit");
+var _ = require("underscore");
 var request = require("./request");
-var Panes = require("./Panes");
-var Editor = require("./Editor");
-var Preview = require("./Preview");
-var Toolbar = require("./Toolbar");
-var Dropdown = require("./Dropdown");
-var SelectMenu = require("./SelectMenu");
-var TitleForm = require("./TitleForm");
-var Content = require("./Content");
 
-function fetchPages() {
-    return request.get(SITE_ROOT + "/pages.json");
+function init(opts) {
+    var Content = require("./Content");
+    var content = new Content({}, opts);
+
+    var sv = new SplitEdit(_.extend({}, opts, {
+        model: content,
+    }));
+
+    sv.render();
+
+    content.fetch();
 }
 
-function picoUrl(format) {
-    return window.location.pathname + "?show=" + format;
-}
 
-var toolbar = new Toolbar();
-toolbar.render();
-$("body").append(toolbar.el);
+init({
+    el: document.body,
+    adapter: {
+        fetchPages: function() {
+            return request.get("/pages.json");
+        },
 
-var content = new Content();
-var panes = new Panes();
+        savePreview: function(content) {
+            return request.post(window.location.pathname, {
+                type: "preview",
+                value: content
+            });
+        },
 
-var editor = new Editor({
-    model: content
-});
+        savePublic: function(content) {
+            return request.post(window.location.pathname, {
+                type: "public",
+                value: content
+            });
+        },
 
-var preview = new Preview({
-    previewUrl: picoUrl("preview")
-});
+        // XXX
+        new: function(title, url) {
+            window.localStorage.presetTitle = title;
+            window.location = url;
+        },
 
-panes.setView(".left-pane", editor);
-panes.setView(".right-pane", preview);
-panes.render();
+        // XXX
+        open: function(title, url) {
+            window.location = url;
+        },
 
-content.initialized.then(function() {
-    panes.setPos(500);
-    content.savePreview(editor.getContent());
-});
+        fetch: function() {
+            var url = window.location.pathname + "?show=json";
+            var previewUrl = window.location.pathname + "?show=preview";
 
-$("body").append(panes.el);
+            return request.get(url).then(function(data) {
+                var title = window.localStorage.presetTitle || "Page Title";
+                if (!data.public && !data.preview) {
+                    data.preview = "/*\nTitle: " + title + "\n*/\n\nContent.\n";
+                    delete window.localStorage.presetTitle;
+                }
 
-content.on("savePreview savePublic", function(p) {
-    p.then(function() {
-        return preview.refresh();
-    });
-});
+                data.previewUrl = previewUrl;
+                return data;
 
-
-content.fetch();
-
-
-toolbar.on("preview", function() {
-    content.savePreview(editor.getContent());
-});
-
-toolbar.on("publish", function() {
-    content.savePublic(editor.getContent());
-});
-
-
-toolbar.on("new", function(e) {
-    var d = new Dropdown({
-        target: e.target
-    });
-
-    var tf = new TitleForm();
-    d.setContent(tf);
-    d.render();
-
-    tf.getTitle().then(function(t) {
-        window.localStorage.presetTitle = t.title;
-        window.location = SITE_ROOT + t.slug + "?show=editor";
-    });
-
-
-});
-
-editor.listenTo(toolbar, "all", function(eventName) {
-    editor.trigger(eventName);
-});
-
-toolbar.on("open", function(e) {
-    var d = new Dropdown({
-        target: e.target
-    });
-
-    var s = new SelectMenu({
-        title: "Pages",
-    });
-
-    d.setContent(s);
-
-    d.render();
-
-    s.selectFrom(fetchPages()).then(function(page) {
-        console.log("TO", page);
-        window.location = SITE_ROOT + page.url + "?show=editor";
-    }).catch(Promise.CancellationError, function() {
-        console.log("cancel");
-    });
-
+            });
+        }
+    }
 
 });
 

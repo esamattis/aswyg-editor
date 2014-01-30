@@ -9,10 +9,6 @@ var Preview = Viewmaster.extend({
 
   template: require("./Preview.hbs"),
 
-  initialize: function(opts) {
-    this.previewUrl = opts.previewUrl;
-  },
-
   afterTemplate: function() {
     this.$iframe = this.$("iframe");
   },
@@ -39,7 +35,7 @@ var Preview = Viewmaster.extend({
       });
     });
 
-    self.$iframe.attr("src", self.previewUrl);
+    self.$iframe.attr("src", self.model.get("previewUrl"));
     return p;
   }
 

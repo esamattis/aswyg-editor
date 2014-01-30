@@ -7,15 +7,14 @@ var request = require("./request");
 
 var Content = Backbone.Model.extend({
 
-    url: window.location.pathname + "?show=json",
-
     defaults: {
         dirty: true,
         dirtyPreview: true,
     },
 
-    initialize: function() {
+    initialize: function(attrs, opts) {
         var self = this;
+        this.adapter = opts.adapter;
 
         self.initialized = new Promise(function(resolve) {
             self.once("change", resolve);
@@ -43,11 +42,7 @@ var Content = Backbone.Model.extend({
             return;
         }
 
-
-        var p = request.post(window.location.pathname, {
-            type: "preview",
-            value: content
-        }).then(function() {
+        var p = this.adapter.savePreview(content).then(function() {
             self.set("dirtyPreview", false);
             self.set("preview", content);
         });
@@ -68,10 +63,7 @@ var Content = Backbone.Model.extend({
             return;
         }
 
-        var p = request.post(window.location.pathname, {
-            type: "public",
-            value: content
-        }).then(function() {
+        var p = this.adapter.savePublic(content).then(function() {
             self.set("dirty", false);
             self.set("public", content);
         });
@@ -82,18 +74,10 @@ var Content = Backbone.Model.extend({
 
     fetch: function() {
         var self = this;
-        return request.get(this.url).then(function(data) {
-
-            var title = window.localStorage.presetTitle || "Page Title";
-            if (!data.public && !data.preview) {
-                data.preview = "/*\nTitle: " + title + "\n*/\n\nContent.\n";
-                delete window.localStorage.presetTitle;
-            }
-
+        return self.adapter.fetch().then(function(data) {
             self.set(data);
         });
     }
-
 
 });
 
