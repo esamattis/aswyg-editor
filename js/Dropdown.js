@@ -51,6 +51,11 @@ var Dropdown = Viewmaster.extend({
     },
 
     setContent: function(view) {
+        console.error("CALL TO BAD  FN");
+        this.setView(".container", view);
+    },
+
+    setWidget: function(view) {
         this.setView(".container", view);
     },
 

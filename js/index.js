@@ -1,71 +1,60 @@
-
-var SplitEdit = require("./SplitEdit");
-var _ = require("underscore");
+var Aswyg = require("./Aswyg");
 var request = require("./request");
 
-function init(opts) {
-    var Content = require("./Content");
-    var content = new Content({}, opts);
-
-    var sv = new SplitEdit(_.extend({}, opts, {
-        model: content,
-    }));
-
-    sv.render();
-
-    content.fetch();
+function defaultContent(title) {
+    return "/*\nTitle: " + title + "\n*/\n\nContent.\n";
 }
 
+var editor = new Aswyg(document.body, {
 
-init({
-    el: document.body,
-    adapter: {
-        fetchPages: function() {
-            return request.get("/pages.json");
-        },
+    fetchPageList: function() {
+        return request.get("/pages.json");
+    },
 
-        savePreview: function(content) {
-            return request.post(window.location.pathname, {
-                type: "preview",
-                value: content
-            });
-        },
+    fetchPage: function(page) {
+        window.location = "/" + page.url + "?show=editor";
+    },
 
-        savePublic: function(content) {
-            return request.post(window.location.pathname, {
-                type: "public",
-                value: content
-            });
-        },
+    saveDraft: function(content) {
+        return request.post(window.location.pathname, {
+            type: "preview",
+            value: content
+        });
+    },
 
-        // XXX
-        new: function(title, url) {
-            window.localStorage.presetTitle = title;
-            window.location = url;
-        },
+    publish: function(content) {
+        return request.post(window.location.pathname, {
+            type: "public",
+            value: content
+        });
+    },
 
-        // XXX
-        open: function(title, url) {
-            window.location = url;
-        },
+    createNew: function(page) {
+        window.localStorage.presetTitle = page.title;
+        window.location = "/" + url.slug + "?show=editor";
+    },
 
-        fetch: function() {
-            var url = window.location.pathname + "?show=json";
-            var previewUrl = window.location.pathname + "?show=preview";
+    logout: function() {
+        window.location = "/logout";
+    },
 
-            return request.get(url).then(function(data) {
-                var title = window.localStorage.presetTitle || "Page Title";
-                if (!data.public && !data.preview) {
-                    data.preview = "/*\nTitle: " + title + "\n*/\n\nContent.\n";
-                    delete window.localStorage.presetTitle;
-                }
+    delete: function() {
 
-                data.previewUrl = previewUrl;
-                return data;
-
-            });
-        }
     }
 
 });
 
+
+var url = window.location.pathname + "?show=json";
+var previewUrl = window.location.pathname + "?show=preview";
+
+editor.setContent(request.get(url).then(function(data) {
+    var title = window.localStorage.presetTitle || "Page Title";
+    if (!data.public && !data.preview) {
+        data.preview = defaultContent(title);
+        delete window.localStorage.presetTitle;
+    }
+
+    data.previewUrl = previewUrl;
+    return data;
+}));

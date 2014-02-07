@@ -12,6 +12,10 @@ var Editor = Viewmaster.extend({
 
     template: require("./Editor.hbs"),
 
+    initialize: function() {
+        this.model.set("dirty", false, { silent: true });
+    },
+
     afterTemplate: function() {
         var self = this;
 
@@ -37,40 +41,60 @@ var Editor = Viewmaster.extend({
             self.md.italics();
         });
 
-        self.listenTo(self, "resizeend", function() {
+        self.on("resizeend", function() {
             self.cm.refresh();
         });
 
-
         self.model.initialized.then(function() {
-            self.cm.setValue(
-                self.model.get("preview") || self.model.get("public") || ""
-            );
+
+            self.setContentFromModel();
+
+            self.listenTo(self.model, "change:draft change:public", function() {
+                self.setContentFromModel();
+            });
 
             self.cm.on("change", function() {
-                self.model.setDirty();
+                self.model.set("dirty", true);
             });
 
             self.cm.on("change", _.debounce(function() {
-                self.savePreview();
+                self.autoSave();
             }, 5000));
 
+            // XXX: listenTo
             $(window).on("blur", function() {
-                self.savePreview();
+                self.autoSave();
             });
-
 
         });
     },
 
-    savePreview: function() {
-        this.model.savePreview(this.getContent());
+    autoSave: function() {
+        var self = this;
+        if (!this.model.get("dirty")) {
+            console.log("Skipping autosave. Not dirty.");
+            return;
+        }
+
+        console.log("Autosaving...");
+        this.model.saveDraft(this.getContent())
+        .then(function() {
+            self.model.set("dirty", false);
+            console.log("Autosave ok!");
+        }, function(err) {
+            console.error("Autosave failed!", err);
+        });
+    },
+
+    setContentFromModel: function() {
+        this.cm.setValue(
+            this.model.get("draft") || this.model.get("public") || ""
+        );
     },
 
     getContent: function() {
         return this.cm.getValue();
     }
-
 
 });
 

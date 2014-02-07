@@ -23,7 +23,7 @@ var Toolbar = Viewmaster.extend({
                 },
                 {
                     title: "Save draft",
-                    action: "save",
+                    action: "saveDraft",
                     buttonClass: "fa fa-save"
                 },
 

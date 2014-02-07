@@ -1,82 +1,39 @@
 
-
 var Promise = require("bluebird");
 var Backbone = require("backbone");
-var request = require("./request");
-
+var _ = require("underscore");
 
 var Content = Backbone.Model.extend({
 
-    defaults: {
-        dirty: true,
-        dirtyPreview: true,
-    },
-
     initialize: function(attrs, opts) {
         var self = this;
-        this.adapter = opts.adapter;
+        this.backend = opts.backend;
 
         self.initialized = new Promise(function(resolve) {
             self.once("change", resolve);
         });
 
-    },
-
-    setDirty: function() {
-        this.set({
-            dirty: true,
-            dirtyPreview: true,
+        // Mixin the backend and ensure that it returns promises
+        _.each(opts.backend, function(fn, key) {
+            self[key] = function() {
+                var res = Promise.cast(fn.apply(self, arguments));
+                self.trigger(key, res);
+                return res;
+            };
         });
+
     },
 
-
-    savePreview: function(content) {
+    reset: function(data) {
         var self = this;
-        if (!self.get("dirtyPreview")) {
-            console.log("Preview not dirty");
-            return;
-        }
-
-        if (!content || !content.trim()) {
-            console.warn("Not saving empty content");
-            return;
-        }
-
-        var p = this.adapter.savePreview(content).then(function() {
-            self.set("dirtyPreview", false);
-            self.set("preview", content);
+        return Promise.cast(data).then(function(data) {
+            self.clear({ silent: true });
+            self.set(data);
         });
-
-        self.trigger("savePreview", p);
-        return p;
-    },
-
-    savePublic: function(content) {
-        var self = this;
-        if (!self.get("dirty")) {
-            console.log("Not dirty");
-            return;
-        }
-
-        if (!content || !content.trim()) {
-            console.warn("Not saving empty content");
-            return;
-        }
-
-        var p = this.adapter.savePublic(content).then(function() {
-            self.set("dirty", false);
-            self.set("public", content);
-        });
-
-        self.trigger("savePublic", p);
-        return p;
     },
 
     fetch: function() {
-        var self = this;
-        return self.adapter.fetch().then(function(data) {
-            self.set(data);
-        });
+        throw new Error("fetch not in use");
     }
 
 });

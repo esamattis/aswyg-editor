@@ -9,6 +9,28 @@ var Preview = Viewmaster.extend({
 
   template: require("./Preview.hbs"),
 
+  constructor: function(opts) {
+      Viewmaster.prototype.constructor.apply(this, arguments);
+      var self = this;
+
+      this.listenTo(
+        this.model,
+        "saveDraft publish createNew",
+        function(p) {
+            p.then(function() {
+                self.refresh();
+            });
+        }
+      );
+
+      this.listenTo(
+        this.model,
+        "change:draftUrl",
+        self.refresh.bind(this)
+      );
+  },
+
+
   afterTemplate: function() {
     this.$iframe = this.$("iframe");
   },
@@ -35,7 +57,7 @@ var Preview = Viewmaster.extend({
       });
     });
 
-    self.$iframe.attr("src", self.model.get("previewUrl"));
+    self.$iframe.attr("src", self.model.get("draftUrl"));
     return p;
   }
 
