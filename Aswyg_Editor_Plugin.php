@@ -29,22 +29,23 @@ class Aswyg_Controller
     }
 
 
-    public function authenticate()
+    public function is_session_ok()
     {
-        session_start();
+        return isset($_SESSION['login']) && $_SESSION['login'];
+    }
 
-        if (isset($_SESSION['login']) && $_SESSION['login']) return true;
-
+    public function create_session()
+    {
+        error_log("trying to create");
         if (isset($_POST['password']) && $_POST['password'] === 'kala') {
             $_SESSION['login'] = true;
             header("Location: " . $_SERVER['REQUEST_URI']);
-            die();
+        } else {
+            return $this->render_login_form();
         }
-
-        return false;
     }
 
-    public function logout()
+    public function destroy_session()
     {
         session_destroy();
         header("Location: " . $this->site_root);
@@ -240,7 +241,12 @@ class Aswyg_Editor_Plugin
         if (!$this->enabled) return;
 
         $aswyg = new Aswyg_Controller($this->url, $file);
-        if (!$aswyg->authenticate()) {
+
+        session_start();
+        if ($this->is('POST')) die($aswyg->create_session());
+        if ($this->is('GET', '_logout')) die($aswyg->destroy_session());
+
+        if (!$aswyg->is_session_ok()) {
             die($aswyg->render_login_form());
         }
 
@@ -258,7 +264,6 @@ class Aswyg_Editor_Plugin
         if ($this->is('GET', '_edit')) die($aswyg->render_editor());
         if ($this->is('GET', '_json')) die($aswyg->render_page_json());
         if ($this->is('GET', '_index')) die($aswyg->render_page_index_json());
-        if ($this->is('GET', '_logout')) die($aswyg->logout());
 
         if ($this->is('PUT')) die($aswyg->publish_page());
         if ($this->is('DELETE')) die($aswyg->delete_page());
