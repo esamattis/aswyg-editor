@@ -35,7 +35,7 @@ var Toolbar = Viewmaster.extend({
 
                 {
                     title: "Preview in external window",
-                    action: "preview",
+                    action: "externalPreview",
                     buttonClass: "fa fa-share-square-o"
                 },
 
@@ -130,7 +130,7 @@ var Toolbar = Viewmaster.extend({
 
     events: {
         "click button": function(e) {
-            this.trigger($(e.target).data("action"), e);
+            this.bubble($(e.target).data("action"), e);
 
         }
     }

@@ -5,61 +5,75 @@ var Promise = require("bluebird");
 
 var Preview = Viewmaster.extend({
 
-  className: "bb-preview",
+    className: "bb-preview",
 
-  template: require("./Preview.hbs"),
+    template: require("./Preview.hbs"),
 
-  constructor: function(opts) {
-      Viewmaster.prototype.constructor.apply(this, arguments);
-      var self = this;
+    constructor: function(opts) {
+        Viewmaster.prototype.constructor.apply(this, arguments);
+        var self = this;
+        this.scrollX = 0;
+        this.scrollY = 0;
 
-      this.listenTo(
-        this.model,
-        "saveDraft publish createNew",
-        function(p) {
-            p.then(function() {
-                self.refresh();
-            });
+        this.listenTo(
+            this.model,
+            "saveDraft publish createNew",
+            function(p) {
+                p.then(function() {
+                    self.refresh();
+                });
+            }
+        );
+
+        this.listenTo(
+            this.model,
+            "change:draftUrl",
+            self.refresh.bind(this)
+        );
+    },
+
+
+    afterTemplate: function() {
+        this.$iframe = this.$("iframe");
+    },
+
+    getContentWindow: function() {
+        return this.$iframe.get(0).contentWindow;
+    },
+
+    saveScroll: function(){
+        var w = this.getContentWindow();
+        if (w) {
+            this.scrollX = w.scrollX;
+            this.scrollY = w.scrollY;
         }
-      );
+    },
 
-      this.listenTo(
-        this.model,
-        "change:draftUrl",
-        self.refresh.bind(this)
-      );
-  },
+    restoreScroll: function() {
+        if (this.scrollX || this.scrollY) {
+            this.getContentWindow().scrollTo(this.scrollX, this.scrollY);
+        }
+    },
 
+    refresh: function() {
+        var self = this;
+        if (!this.getContentWindow()) return;
 
-  afterTemplate: function() {
-    this.$iframe = this.$("iframe");
-  },
+        self.saveScroll();
 
-  saveScroll: function(){
-    var el = this.$iframe.get(0);
-    this.scrollX = el.contentWindow.scrollX;
-    this.scrollY = el.contentWindow.scrollY;
-  },
+        return new Promise(function(resolve, reject) {
 
-  restoreScroll: function() {
-    var win = this.$iframe.get(0).contentWindow;
-    win.scrollTo(this.scrollX, this.scrollY);
-  },
+            self.$iframe.one("load", function() {
+                self.restoreScroll();
+                resolve();
+            });
 
-  refresh: function() {
-    var self = this;
-    self.saveScroll();
+            self.getContentWindow().location.replace(
+                self.model.get("draftUrl")
+            );
 
-    var p =  new Promise(function(resolve, reject) {
-      self.$iframe.one("load", function() {
-          self.restoreScroll();
-          resolve();
-      });
-    });
-
-    self.$iframe.attr("src", self.model.get("draftUrl"));
-    return p;
-  }
+        });
+    }
 
 });
 

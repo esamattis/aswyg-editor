@@ -21,12 +21,11 @@ var Dropdown = Viewmaster.extend({
             "left": "0px",
             "right": "0px",
             "z-index": "1000",
-
-            "background-color": "black",
-            "opacity": "0.4"
+            // "background-color": "black",
+            // "opacity": "0.4"
         });
-    },
 
+    },
 
     template: require("./Dropdown.hbs"),
 
@@ -36,12 +35,7 @@ var Dropdown = Viewmaster.extend({
         this.$overlay.appendTo("body");
         var o = this.$target.offset();
         $("body").append(this.el);
-
-        console.log(o);
-        var targetHalf = this.$target.width() / 2;
-        var left = o.left + targetHalf;
-        left = Math.max(left, 10);
-
+        var left = o.left;
         this.$el.css("left", left + "px");
         this.$el.css("top", o.top + this.$target.height() + "px");
 
@@ -50,12 +44,8 @@ var Dropdown = Viewmaster.extend({
         });
     },
 
-    setContent: function(view) {
-        console.error("CALL TO BAD  FN");
-        this.setView(".container", view);
-    },
-
     setWidget: function(view) {
+        this.listenToOnce(view, "done", this.remove.bind(this));
         this.setView(".container", view);
     },
 
@@ -66,5 +56,14 @@ var Dropdown = Viewmaster.extend({
 
 });
 
+Dropdown.display = function(el, view) {
+    var d = new Dropdown({
+        target: el
+    });
+    d.setWidget(view);
+    d.render();
+    $("body").append(d.el);
+    return d;
+};
 
 module.exports = Dropdown;

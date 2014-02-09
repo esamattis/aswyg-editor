@@ -13,6 +13,9 @@
         </div>
 
 
-        <script src="/plugins/editor/build/js/index.js" charset="utf-8"></script>
+        <script charset="utf-8">
+            window.PICO_INITIAL = {{ initial|json_encode()|raw }};
+        </script>
+        <script src="/plugins/aswyg_editor/aswyg.js" charset="utf-8"></script>
     </body>
 </html>

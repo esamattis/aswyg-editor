@@ -27,9 +27,13 @@ var Editor = Viewmaster.extend({
             indentWithTabs: false,
             smartIndent: true,
             tabMode: "spaces",
-
-            tabSize: 4
+            tabSize: 4,
+            extraKeys: {
+                "Ctrl-S": self.save.bind(self)
+            }
         });
+
+
 
         self.md = new CMMD(self.cm);
 
@@ -58,18 +62,18 @@ var Editor = Viewmaster.extend({
             });
 
             self.cm.on("change", _.debounce(function() {
-                self.autoSave();
+                self.save();
             }, 5000));
 
             // XXX: listenTo
             $(window).on("blur", function() {
-                self.autoSave();
+                self.save();
             });
 
         });
     },
 
-    autoSave: function() {
+    save: function() {
         var self = this;
         if (!this.model.get("dirty")) {
             console.log("Skipping autosave. Not dirty.");

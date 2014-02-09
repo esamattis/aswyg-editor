@@ -7,4 +7,4 @@ all:
 	find node_modules/ -name "*.php"  -delete
 
 watch:
-	watchify -d -t sassify -t hbsfy js/index.js -o build/js/index.js
+	watchify -d -t sassify -t hbsfy js/index.js -o aswyg.js

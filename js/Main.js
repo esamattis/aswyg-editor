@@ -7,6 +7,7 @@ Backbone.$ = $;
 var Viewmaster = require("viewmaster");
 var Promise = require("bluebird");
 Promise.longStackTraces();
+var key = require("keymaster");
 
 var Panes = require("./Panes");
 var Editor = require("./Editor");
@@ -15,6 +16,8 @@ var Toolbar = require("./Toolbar");
 var Dropdown = require("./Dropdown");
 var SelectMenu = require("./SelectMenu");
 var TitleForm = require("./TitleForm");
+var errorReporter = require("./errorReporter");
+
 
 var Layout = Viewmaster.extend({
 
@@ -55,68 +58,73 @@ var Layout = Viewmaster.extend({
             self.panes.setPos(500);
         });
 
-        self.listenTo(self.toolbar, "saveDraft", function() {
-            self.model.saveDraft(self.editor.getContent())
-            .then(function() {
-                self.preview.refresh();
-            }, function(err) {
-                console.error("Failed to save draft", err);
-            });
+        self.listenTo(self.toolbar, "saveDraft", self.saveDraft.bind(self));
+        key("ctrl+s", function(e) {
+            self.saveDraft();
+            return false;
         });
 
         self.listenTo(self.toolbar, "publish", function() {
             self.model.publish(self.editor.getContent())
             .then(function() {
-                self.preview.refresh();
-            }, function(err) {
-                console.error("Failed to publish content", err);
-            });
+                window.location = self.model.get("publicUrl");
+            }, errorReporter("Failed to publish"));
         });
 
 
         self.toolbar.on("new", function(e) {
-            var d = new Dropdown({
-                target: e.target
-            });
+            var form = new TitleForm();
+            Dropdown.display(e.target, form);
 
-            var tf = new TitleForm();
-            d.setWidget(tf);
-            d.render();
-
-            tf.getTitle().then(function(t) {
-                return self.model.reset(self.model.createNew(t));
-            }, function(err) {
-                console.error("Failed to create new page", err);
-            });
+            form.getTitle().then(function(t) {
+                if (typeof self.model.createNew === "function") {
+                    return self.model.reset(self.model.createNew(t));
+                }
+                throw new Error("createNew is not implemented");
+            }).then(function() {
+                form.parent.remove();
+            }, errorReporter("Failed to create new page"));
 
         });
 
 
         self.listenTo(self.toolbar, "open", function(e) {
-            var d = new Dropdown({
-                target: e.target
+
+            var menu = new SelectMenu({
+                title: "Open",
             });
 
-            var s = new SelectMenu({
-                title: "Pages",
-            });
+            Dropdown.display(e.target, menu);
 
-            d.setWidget(s);
-
-            d.render();
-
-            s.selectFrom(self.model.fetchPageList())
+            menu.selectFrom(self.model.fetchPageList())
             .then(function(page) {
-                return self.model.reset(self.model.fetchPage(page));
-            })
-            .catch(Promise.CancellationError, function() {
-                console.log("cancel");
-            })
-            .catch(function(err) {
-                console.error("Failed to select page", err);
+                if (typeof self.model.fetchPage === "function") {
+                    return self.model.reset(self.model.fetchPage(page));
+                }
+                throw new Error("fetchPage is not implemented");
+            }).then(function() {
+                menu.parent.remove();
             });
 
         });
+
+        self.listenTo(self.toolbar, "delete", function(e) {
+            self.model.delete().catch(errorReporter("Failed to delete page"));
+        });
+
+        self.listenTo(self.toolbar, "externalPreview", function() {
+            window.open(self.model.get("draftUrl") , "_blank");
+        });
+
+
+    },
+
+    saveDraft: function() {
+        var self = this;
+        self.model.saveDraft(self.editor.getContent())
+        .then(function() {
+            self.preview.refresh();
+        }, errorReporter("Failed to save draft"));
     }
 
 

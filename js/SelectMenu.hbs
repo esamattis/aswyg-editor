@@ -1,11 +1,13 @@
 {{error}}
 
+<h1>{{title}}</h1>
+
 <ul>
     {{#each items}}
     <li>
-        <button data-value="{{value}}">
+        <a href="#" data-value="{{value}}">
             {{title}}
-        </button>
+        </a>
     </li>
 
     {{/each}}

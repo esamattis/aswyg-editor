@@ -129,7 +129,7 @@ div, html, body, iframe, ul, li, h1, h2, h3 {
 }
 
 
-$dropdown-menu-color: black;
+$dropdown-menu-color: lightgray;
 
 .arrow-up {
     margin: 0px;
@@ -146,6 +146,7 @@ $dropdown-menu-color: black;
     h1 {
         padding: 0px;
         font-size: 1em;
+        margin-bottom: 1em;
     }
 
     .content-wrap {
@@ -155,7 +156,7 @@ $dropdown-menu-color: black;
 
     .content {
         padding: 1em;
-        background-color: red;
+        background-color: white;
     }
 
     li {
@@ -170,6 +171,15 @@ $dropdown-menu-color: black;
         margin: 0px;
     }
 
+}
+
+.bb-selectmenu {
+    li {
+        margin-bottom: 1em;
+        a:hover {
+            text-decoration: none;
+        }
+    }
 }
 
 .bb-titleform {

@@ -5,6 +5,8 @@ var Promise = require("bluebird");
 
 var SelectMenu = Viewmaster.extend({
 
+    className: "bb-selectmenu",
+
     template: require("./SelectMenu.hbs"),
 
     initialize: function(opts) {
@@ -13,15 +15,10 @@ var SelectMenu = Viewmaster.extend({
     },
 
     events: {
-        "click button": function(e) {
-            this.trigger("select", $(e.target).data("value"));
-            this.remove();
+        "click button,a": function(e) {
+            e.preventDefault();
+            this.trigger("_select", $(e.target).data("value"));
         }
-    },
-
-    remove: function() {
-        Viewmaster.prototype.remove.apply(this, arguments);
-        this.defer.reject(new Promise.CancellationError());
     },
 
     context: function() {
@@ -35,33 +32,28 @@ var SelectMenu = Viewmaster.extend({
     selectFrom: function(items) {
         var self = this;
         self.render();
-        self.defer = Promise.defer();
-        self.once("select", function(v) {
-            self.defer.resolve(v);
-        });
+        return new Promise(function(resolve, reject){
+            self.once("_select", resolve);
+            Promise.cast(items).then(function(values) {
 
-        Promise.cast(items).then(function(values) {
+                self._itemValues = values.map(function(v) {
+                    return {
+                        title: v.title,
+                        value: JSON.stringify(v)
+                    };
+                });
+                self._itemValues.sort(function(a, b) {
+                    return a.title > b.title ? 1 : -1;
+                });
+                self.render();
+            }, reject);
 
-            self._itemValues = values.map(function(v) {
-                return {
-                    title: v.title,
-                    value: JSON.stringify(v)
-                };
-            });
-            self._itemValues.sort(function(a, b) {
-                return a.title > b.title ? 1 : -1;
-            });
-
-            self.render();
-
-        }, function(err) {
-            console.error("failed to render dropdown", self, err);
+        }).catch(function(err) {
+            console.error("failed to render select", self, err);
             self.error = "Bad data";
             self.render();
-            self.defer.reject(err);
         });
 
-        return self.defer.promise;
     }
 
 });
