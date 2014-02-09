@@ -109,6 +109,7 @@ var Layout = Viewmaster.extend({
         });
 
         self.listenTo(self.toolbar, "delete", function(e) {
+            if (!window.confirm("Delete this page?")) return;
             self.model.delete().catch(errorReporter("Failed to delete page"));
         });
 
