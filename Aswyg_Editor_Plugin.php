@@ -28,14 +28,31 @@ class Aswyg_Controller
         $this->loader = new Twig_Loader_Filesystem($this->plugin_path);
     }
 
+
     public function authenticate()
     {
-        return true;
+        session_start();
+
+        if (isset($_SESSION['login']) && $_SESSION['login']) return true;
+
+        if (isset($_POST['password']) && $_POST['password'] === 'kala') {
+            $_SESSION['login'] = true;
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            die();
+        }
+
+        return false;
+    }
+
+    public function logout()
+    {
+        session_destroy();
+        header("Location: " . $this->site_root);
     }
 
     public function render_login_form()
     {
-        return "login form";
+        return $this->render_template("login.html");
     }
 
     public function render_editor()
@@ -81,7 +98,6 @@ class Aswyg_Controller
 
     public function delete_page()
     {
-        error_log("DEÖETE");
 
         $this->delete_draft();
 
@@ -169,7 +185,7 @@ class Aswyg_Controller
         return json_encode($data);
     }
 
-    private function render_template($tmpl, $context)
+    private function render_template($tmpl, $context=array())
     {
         $twig = new Twig_Environment($this->loader);
         return $twig->render($tmpl, $context);
@@ -207,15 +223,9 @@ class Aswyg_Editor_Plugin
         preg_match($url_pat, $url, $groups);
 
 
-        if ($groups) {
+        if (isset($groups[0]) && $groups[0]) {
             $this->enabled = true;
-
-            $this->is_draft = $groups[2] === '_draft';
-            $this->is_edit = $groups[2] === '_edit';
-            $this->is_index = $groups[2] === '_index';
-            $this->is_json = $groups[2] === '_json';
-            $this->is_logout = $groups[2] === '_logout';
-            $this->enabled = true;
+            $this->action = $groups[2];
 
             // Restore normal url for Pico
             $url = $groups[1];
@@ -224,9 +234,10 @@ class Aswyg_Editor_Plugin
         $this->url = $url;
     }
 
-    private function route($method, $action)
+    private function is($method, $action=NULL)
     {
-    
+        if ($method !== $_SERVER['REQUEST_METHOD']) return false;
+        return $action === NULL || $action === $this->action;
     }
 
     public function before_load_content(&$file)
@@ -240,7 +251,7 @@ class Aswyg_Editor_Plugin
 
         // If this is a draft request just change the file loaded by Pico to be
         // our draft file and continue normallly.
-        if ($this->method === 'GET' && $this->is_draft) {
+        if ($this->is('GET', '_draft')) {
             if (file_exists($aswyg->draft_file)) {
                 $file = $aswyg->draft_file;
             }
@@ -248,12 +259,14 @@ class Aswyg_Editor_Plugin
         }
 
         // Otherwise stop pico machinery and render page using Aswyg_Controller
-        if ($this->method === 'PUT' && $this->is_draft) die($aswyg->save_draft());
-        if ($this->method === 'GET' && $this->is_edit) die($aswyg->render_editor());
-        if ($this->method === 'GET' && $this->is_json) die($aswyg->render_page_json());
-        if ($this->method === 'GET' && $this->is_index) die($aswyg->render_page_index_json());
-        if ($this->method === 'PUT') die($aswyg->publish_page());
-        if ($this->method === 'DELETE') die($aswyg->delete_page());
+        if ($this->is('PUT', '_draft')) die($aswyg->save_draft());
+        if ($this->is('GET', '_edit')) die($aswyg->render_editor());
+        if ($this->is('GET', '_json')) die($aswyg->render_page_json());
+        if ($this->is('GET', '_index')) die($aswyg->render_page_index_json());
+        if ($this->is('GET', '_logout')) die($aswyg->logout());
+
+        if ($this->is('PUT')) die($aswyg->publish_page());
+        if ($this->is('DELETE')) die($aswyg->delete_page());
     }
 
 }

@@ -33,7 +33,7 @@ var editor = new Aswyg(document.body, {
     },
 
     logout: function() {
-        window.location = "/logout";
+        window.location = "/_logout";
     },
 
     delete: function() {
