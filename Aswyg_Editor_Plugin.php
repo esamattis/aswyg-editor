@@ -24,8 +24,8 @@ class Aswyg_Controller
         $this->url = preg_replace('/.+(\/$)/', '', $this->url);
 
 
-        $plugin_path = dirname(__FILE__);
-        $this->loader = new Twig_Loader_Filesystem($plugin_path);
+        $this->plugin_path = dirname(__FILE__);
+        $this->loader = new Twig_Loader_Filesystem($this->plugin_path);
     }
 
     public function authenticate()
@@ -99,12 +99,22 @@ class Aswyg_Controller
 
     private function get_page_data()
     {
-        return array(
+        $data = array(
             'publicUrl' => $this->url,
             'draftUrl' => $this->url === '/' ? '/_draft' : $this->url . '/_draft',
             'draft' => @file_get_contents($this->draft_file),
             'public' => @file_get_contents($this->public_file)
         );
+
+        if (!$data['draft'] && !$data['public']) {
+            // error_log($this->plugin_path + 'initial.md');
+            $data['draft'] = file_get_contents($this->plugin_path . '/initial.md');
+            if ($data['draft'] === false) {
+                $this->die_error("Failed to read initial.md");
+            }
+        }
+
+        return $data;
     }
 
     public function render_page_json()

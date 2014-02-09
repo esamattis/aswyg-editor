@@ -1,20 +1,5 @@
 var Aswyg = require("./Aswyg");
 
-function ensureDefaultContent(data) {
-    return Aswyg.Promise.cast(data).then(function(data) {
-        var current = data.draft || data.public;
-        if (!current) {
-            data.draft = [
-                "/*\nTitle: Page Title\n*/",
-                "First paragraph.",
-                "## Second header",
-                "Second paragraph"
-            ].join("\n\n");
-        }
-        return data;
-    });
-}
-
 var editor = new Aswyg(document.body, {
 
     fetchPageList: function() {
@@ -23,7 +8,7 @@ var editor = new Aswyg(document.body, {
 
     fetchPage: function(page) {
         history.pushState(page, "", "/"  + page.slug + "/_edit");
-        return ensureDefaultContent(Aswyg.$.get("/" + page.slug + "/_json"));
+        return Aswyg.$.get("/" + page.slug + "/_json");
     },
 
     saveDraft: function(content) {
@@ -44,7 +29,7 @@ var editor = new Aswyg(document.body, {
 
     createNew: function(page) {
         history.pushState(page, "", "/"  + page.slug + "/_edit");
-        return ensureDefaultContent(Aswyg.$.get("/" + page.slug + "/_json"));
+        return Aswyg.$.get("/" + page.slug + "/_json");
     },
 
     logout: function() {
@@ -57,8 +42,6 @@ var editor = new Aswyg(document.body, {
             type: "DELETE",
         }).then(function() {
             window.location = "/_edit";
-        }, function(err) {
-            console.error("Failed to delete this page", err);
         });
     }
 
@@ -70,4 +53,4 @@ window.onpopstate = function() {
     console.log("pop state", arguments);
 };
 
-editor.setContent(ensureDefaultContent(window.PICO_INITIAL));
+editor.setContent(window.PICO_INITIAL);
