@@ -200,11 +200,6 @@ class Aswyg_Editor_Plugin
     {
         $this->url = '';
         $this->enabled = false;
-        $this->is_draft = false;
-        $this->is_edit = false;
-        $this->is_index = false;
-        $this->is_json = false;
-        $this->is_json = false;
         $this->method = '';
     }
 
