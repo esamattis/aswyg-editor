@@ -1,6 +1,6 @@
 /*global Aswyg */
 
-var editor = new window.Aswyg(document.body, {
+var editor = new Aswyg(document.body, {
 
     fetchPageList: function() {
         return Aswyg.$.get("_index");
