@@ -72,7 +72,7 @@ var Layout = Viewmaster.extend({
         });
 
 
-        self.toolbar.on("new", function(e) {
+        self.listenTo(self.toolbar, "new", function(e) {
             var form = new TitleForm();
             Dropdown.display(e.target, form);
 

@@ -202,6 +202,7 @@ class Aswyg_Editor_Plugin
         $this->url = '';
         $this->enabled = false;
         $this->method = '';
+        $this->action = null;
     }
 
 
@@ -230,10 +231,10 @@ class Aswyg_Editor_Plugin
         $this->url = $url;
     }
 
-    private function is($method, $action=NULL)
+    private function is($method, $action=null)
     {
         if ($method !== $_SERVER['REQUEST_METHOD']) return false;
-        return $action === NULL || $action === $this->action;
+        return $action === null || $action === $this->action;
     }
 
     public function before_load_content(&$file)

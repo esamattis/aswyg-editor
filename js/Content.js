@@ -29,18 +29,11 @@ var Content = Backbone.Model.extend({
         data = Promise.cast(data);
         this.trigger("resetStart", data);
         return data.then(function(data) {
-            console.log("Loading", data);
             self.clear({ silent: true });
             self.set(data);
-        }, function(err) {
-            console.error("Failed to content", err, err && err.responseText);
-            throw err;
         });
-    },
-
-    fetch: function() {
-        throw new Error("fetch not in use");
     }
+
 
 });
 

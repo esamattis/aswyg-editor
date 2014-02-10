@@ -2,9 +2,11 @@
 function errorReporter(msg) {
     return function(err) {
         var str = "";
-        err = err || {};
 
-        if (err.responseText) {
+        if (!err) {
+            str += "Rejection without an object!";
+        } else if (err.responseText) {
+            // jQuery ajax object
             str += "Ajax error: " + err.responseText;
         } else if (err.message) {
             str += "Error: " + err.message;
