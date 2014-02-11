@@ -1,8 +1,8 @@
 {
-  "name": "editor",
+  "name": "aswyg-editor",
   "version": "0.0.0",
   "description": "",
-  "main": "editor.js",
+  "main": "index.js",
   "dependencies": {
     "code-mirror": "~3.21.0",
     "underscore": "~1.5.2",
@@ -15,10 +15,6 @@
     "bluebird": "~1.0.0",
     "sassify": "~0.1.2",
     "keymaster": "git://github.com/epeli/keymaster"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Esa-Matti Suuronen",
   "license": "MIT"

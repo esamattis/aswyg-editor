@@ -1,1 +1,0 @@
-window.Aswyg = require("./Aswyg");
