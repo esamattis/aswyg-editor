@@ -3,6 +3,7 @@ var $ = require("jquery");
 var _ = require("underscore");
 var Viewmaster = require("viewmaster");
 var CodeMirror = require("code-mirror/mode/markdown");
+var errorReporter = require("./errorReporter");
 
 var CMMD = require("./CMMD");
 
@@ -85,9 +86,7 @@ var Editor = Viewmaster.extend({
         .then(function() {
             self.model.set("dirty", false);
             console.log("Autosave ok!");
-        }, function(err) {
-            console.error("Autosave failed!", err);
-        });
+        }, errorReporter("Autosave failed"));
     },
 
     setContentFromModel: function() {
