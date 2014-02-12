@@ -76,20 +76,14 @@ var Toolbar = Viewmaster.extend({
                 },
 
                 {
-                    title: "Strikethrough",
-                    action: "strikethrough",
-                    buttonClass: "fa fa-strikethrough"
-                },
-
-                {
                     title: "List",
-                    action: "list",
+                    action: "ul",
                     buttonClass: "fa fa-list"
                 },
 
                 {
                     title: "Numbered list",
-                    action: "list",
+                    action: "ol",
                     buttonClass: "fa fa-list-ol"
                 },
 
@@ -101,7 +95,7 @@ var Toolbar = Viewmaster.extend({
 
                 {
                     title: "Link",
-                    action: "links",
+                    action: "link",
                     buttonClass: "fa fa-link"
                 },
 

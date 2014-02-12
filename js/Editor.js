@@ -46,6 +46,39 @@ var Editor = Viewmaster.extend({
             self.md.italics();
         });
 
+        self.on("heading1", function() {
+            self.md.heading1();
+        });
+
+        self.on("heading2", function() {
+            self.md.heading2();
+        });
+
+        self.on("heading3", function() {
+            self.md.heading3();
+        });
+
+        self.on("ul", function() {
+            self.md.ul();
+        });
+
+        self.on("ol", function() {
+            self.md.ol();
+        });
+
+        self.on("table", function() {
+            self.md.table();
+        });
+
+        self.on("link", function() {
+            self.md.link();
+        });
+
+        self.on("image", function() {
+            self.md.image();
+        });
+
+
         self.on("resizeend", function() {
             self.cm.refresh();
         });
