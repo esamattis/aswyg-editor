@@ -14,6 +14,7 @@ var Preview = Viewmaster.extend({
         var self = this;
         this.scrollX = 0;
         this.scrollY = 0;
+        this.stayOnUrl = null;
 
         this.listenTo(
             this.model,
@@ -34,7 +35,33 @@ var Preview = Viewmaster.extend({
 
 
     afterTemplate: function() {
-        this.$iframe = this.$("iframe");
+        var self = this;
+        self.$iframe = self.$("iframe");
+
+        // Monitor whether the user navigates away from the current preview
+        // page and restore.
+        self.$iframe.on("load", function() {
+            var url;
+            try {
+                url = self.getContentWindow().location.toString();
+            } catch (err) { // DOMException
+                // User navigate to another domain. Security exception.
+                console.warn("Cannot access contentWindow. Restoring iframe", err);
+                self.render();
+                return;
+            }
+
+            if (self.stayOnUrl && self.stayOnUrl !== url) {
+                console.warn("Navigated to", url, "returning...", self.stayOnUrl);
+                self.render();
+            } else {
+                // On the first load register the url the iframe should stay at
+                self.stayOnUrl = url;
+            }
+
+
+        });
+
     },
 
     getContentWindow: function() {
@@ -67,6 +94,10 @@ var Preview = Viewmaster.extend({
                 self.restoreScroll();
                 resolve();
             });
+
+
+            // Reset on refresh as the model might change
+            self.stayOnUrl = null;
 
             self.getContentWindow().location.replace(
                 self.model.get("draftUrl")
