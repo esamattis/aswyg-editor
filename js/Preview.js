@@ -44,8 +44,8 @@ var Preview = Viewmaster.extend({
     saveScroll: function(){
         var w = this.getContentWindow();
         if (w) {
-            this.scrollX = w.scrollX;
-            this.scrollY = w.scrollY;
+            this.scrollX = w.scrollX || 0;
+            this.scrollY = w.scrollY || 0;
         }
     },
 
