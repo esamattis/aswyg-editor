@@ -45,7 +45,7 @@ var Preview = Viewmaster.extend({
             try {
                 url = self.getContentWindow().location.toString();
             } catch (err) { // DOMException
-                // User navigate to another domain. Security exception.
+                // User navigated to another domain. Security exception.
                 console.warn("Cannot access contentWindow. Restoring iframe", err);
                 self.render();
                 return;
