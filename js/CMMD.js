@@ -54,7 +54,6 @@ CMMD.prototype.link = function() {
 };
 
 CMMD.prototype.image = function() {
-    this.editor.replaceSelection(text);
     this.wrap("![", "Image Alt Text", "](http://placekitten.com/250/200)");
 };
 
