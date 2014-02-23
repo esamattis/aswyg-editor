@@ -1,6 +1,4 @@
 
-require("../scss/app.scss");
-
 var $ = require("jquery");
 var Backbone = require("backbone");
 Backbone.$ = $;
