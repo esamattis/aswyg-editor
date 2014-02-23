@@ -145,6 +145,10 @@ $dropdown-menu-color: lightgray;
     z-index: 10001;
     a {
         text-decoration: none;
+        color: blue;
+        &:visited {
+            color: blue;
+        }
         &:hover {
             text-decoration: underline;
         }
