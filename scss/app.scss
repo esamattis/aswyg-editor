@@ -143,6 +143,12 @@ $dropdown-menu-color: lightgray;
 .bb-dropdown {
     position: absolute;
     z-index: 10001;
+    a {
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
     h1 {
         padding: 0px;
         font-size: 1em;
@@ -173,13 +179,8 @@ $dropdown-menu-color: lightgray;
 
 }
 
-.bb-selectmenu {
-    li {
-        margin-bottom: 1em;
-        a:hover {
-            text-decoration: none;
-        }
-    }
+.bb-selectmenu li {
+    margin-bottom: 1em;
 }
 
 .bb-titleform {

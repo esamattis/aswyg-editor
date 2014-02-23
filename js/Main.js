@@ -17,6 +17,7 @@ var Dropdown = require("./Dropdown");
 var SelectMenu = require("./SelectMenu");
 var TitleForm = require("./TitleForm");
 var errorReporter = require("./errorReporter");
+var Publish = require("./Publish");
 
 
 var Layout = Viewmaster.extend({
@@ -64,11 +65,12 @@ var Layout = Viewmaster.extend({
             return false;
         });
 
-        self.listenTo(self.toolbar, "publish", function() {
-            self.model.publish(self.editor.getContent())
-            .then(function() {
-                window.location = self.model.get("publicUrl");
-            }, errorReporter("Failed to publish"));
+        self.listenTo(self.toolbar, "publish", function(e) {
+            var view = new Publish({
+                model: self.model
+            });
+
+            Dropdown.display(e.target, view);
         });
 
 
