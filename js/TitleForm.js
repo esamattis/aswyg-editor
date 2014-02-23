@@ -9,41 +9,32 @@ var TitleForm = Viewmaster.extend({
     className: "bb-titleform",
     template: require("./TitleForm.hbs"),
 
-    initialize: function() {
-        this.defer = Promise.defer();
+    getTitle: function() {
+        var self = this;
+        return new Promise(function(resolve, reject){
+            self.once("submit", function() {
+                resolve({
+                    slug: self.$slug.val().toLowerCase().replace(/[^a-z_]/g, "")
+                });
+            });
+        });
     },
 
-    getTitle: function() {
-        return this.defer.promise;
+    afterTemplate: function() {
+        this.$slug = this.$(".slug");
     },
 
     events: {
         "click .done": "submit",
-
-        "keyup .title": function(e) {
-            this.$slug.val(
-                this.$title.val().toLowerCase().replace(/[^a-z]/g, "")
-            );
-        },
 
         "keyup input": function(e) {
             if (e.which === ENTER) this.submit();
         }
     },
 
-    afterTemplate: function() {
-        this.$title = this.$(".title");
-        this.$slug = this.$(".slug");
-    },
-
     submit: function() {
-        this.defer.resolve({
-            title: this.$title.val(),
-            slug: this.$slug.val()
-        });
+        this.trigger("submit");
     }
-
-
 
 
 });
