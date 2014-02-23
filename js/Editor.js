@@ -24,6 +24,7 @@ var Editor = Viewmaster.extend({
             // theme: require("code-mirror/theme/default"),
             theme: require("code-mirror/theme/elegant"),
             mode: "markdown",
+            lineWrapping: true,
             autofocus: true,
             indentWithTabs: false,
             smartIndent: true,
