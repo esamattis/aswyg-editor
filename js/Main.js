@@ -65,6 +65,7 @@ var Layout = Viewmaster.extend({
 
         self.listenTo(self.toolbar, "publish", function(e) {
             var view = new Publish({
+                editor: self.editor,
                 model: self.model
             });
 

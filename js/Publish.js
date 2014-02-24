@@ -6,7 +6,8 @@ var Publish = Viewmaster.extend({
 
     template: require("./Publish.hbs"),
 
-    initialize: function() {
+    initialize: function(opts) {
+        this.editor = opts.editor;
         this.state = {
             public: false
         };
@@ -23,7 +24,8 @@ var Publish = Viewmaster.extend({
     publish: function() {
         var self = this;
         self.$text.text("Working...");
-        self.model.publish().then(function() {
+
+        self.model.publish(self.editor.getContent()).then(function() {
             self.state.public = true;
             self.render();
 
