@@ -101,7 +101,10 @@ var Layout = Viewmaster.extend({
             menu.selectFrom(self.model.fetchPageList())
             .then(function(page) {
                 if (typeof self.model.fetchPage === "function") {
-                    return self.model.reset(self.model.fetchPage(page));
+                    return self.model.reset(self.model.fetchPage(page))
+                    .then(function() {
+                        self.model.set("dirty", false);
+                    });
                 }
                 throw new Error("fetchPage is not implemented");
             }).then(function() {
