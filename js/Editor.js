@@ -88,10 +88,6 @@ var Editor = Viewmaster.extend({
 
             self.setContentFromModel();
 
-            self.listenTo(self.model, "change:draft change:public", function() {
-                self.setContentFromModel();
-            });
-
             self.cm.on("change", function() {
                 self.model.set("dirty", true);
             });
@@ -109,7 +105,6 @@ var Editor = Viewmaster.extend({
     },
 
     save: function() {
-        var self = this;
         if (!this.model.get("dirty")) {
             console.log("Skipping autosave. Not dirty.");
             return;
@@ -118,9 +113,8 @@ var Editor = Viewmaster.extend({
         console.log("Autosaving...");
         this.model.saveDraft(this.getContent())
         .then(function() {
-            self.model.set("dirty", false);
             console.log("Autosave ok!");
-        }, errorReporter("Autosave failed"));
+        }).catch(errorReporter("Autosave failed"));
     },
 
     setContentFromModel: function() {

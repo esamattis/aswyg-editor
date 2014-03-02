@@ -8,6 +8,32 @@ var Toolbar = Viewmaster.extend({
 
     template: require("./Toolbar.hbs"),
 
+    initialize: function() {
+        var self = this;
+        self.listenTo(self.model, "change", this.renderDirty.bind(this));
+
+    },
+
+    renderDirty: function() {
+        if (this.model.hasUnpublishedChanges()) {
+            this.$publish.addClass("dirty");
+        } else {
+            this.$publish.removeClass("dirty");
+        }
+
+        if (this.model.get("dirty")) {
+            this.$saveDraft.addClass("dirty");
+        } else {
+            this.$saveDraft.removeClass("dirty");
+        }
+    },
+
+    afterTemplate: function() {
+        this.$publish = this.$(".publish");
+        this.$saveDraft = this.$(".saveDraft");
+        this.renderDirty();
+    },
+
     context: function() {
         return {
             buttons: [

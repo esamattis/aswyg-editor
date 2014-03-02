@@ -114,6 +114,13 @@ div, html, body, iframe, ul, li, h1, h2, h3 {
     $bg: #EDEDED;
     background: $bg;
     // background: linear-gradient(to bottom, $bg 0%,#ffffff 20%,#ffffff 80%,$bg 100%);
+
+    .saveDraft button, .publish button {
+        color: gray;
+    }
+    .dirty button {
+        color: red;
+    }
 }
 
 @media (max-width: 55em) {

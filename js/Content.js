@@ -16,13 +16,42 @@ var Content = Backbone.Model.extend({
         // Mixin the backend and ensure that it returns promises
         _.each(opts.backend, function(fn, key) {
             self[key] = function() {
-                var res = Promise.cast(fn.apply(self, arguments));
-                self.trigger(key, res);
+                var args = [].slice.call(arguments);
+                var res = Promise.cast(fn.apply(self, args));
+                self.trigger.apply(self, [key, res].concat(args));
                 return res;
             };
         });
 
+        this.on("saveDraft", function(p, content) {
+            var self = this;
+            p.then(function() {
+                self.set({
+                    dirty: false,
+                    draft: content
+                });
+            });
+        });
+
+        this.on("publish", function(p, content) {
+            var self = this;
+            p.then(function() {
+                self.set({
+                    "public": content,
+                    dirty: false,
+                    draft: null
+                });
+            });
+        });
+
     },
+
+    hasUnpublishedChanges: function() {
+        if (this.get("dirty")) return true;
+        if (!this.get("draft")) return false;
+        return this.get("draft") !== this.get("public");
+    },
+
 
     reset: function(data) {
         var self = this;

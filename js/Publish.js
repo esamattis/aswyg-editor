@@ -1,6 +1,7 @@
 
 var Viewmaster = require("viewmaster");
 var errorReporter = require("./errorReporter");
+var _ = require("underscore");
 
 var Publish = Viewmaster.extend({
 
@@ -9,7 +10,8 @@ var Publish = Viewmaster.extend({
     initialize: function(opts) {
         this.editor = opts.editor;
         this.state = {
-            public: false
+            publishDone: false,
+            unpublishedChanges: this.model.hasUnpublishedChanges()
         };
     },
 
@@ -26,18 +28,16 @@ var Publish = Viewmaster.extend({
         self.$text.text("Working...");
 
         self.model.publish(self.editor.getContent()).then(function() {
-            self.state.public = true;
+            self.state.publishDone = true;
             self.render();
-
-        }, function(err) {
+        }).catch(function(err) {
             errorReporter("Failed to publish")(err);
             self.$text.text("Failed to publish :(");
         });
     },
 
     context: function() {
-        this.state.publicUrl = this.model.get("publicUrl");
-        return this.state;
+        return _.extend({}, this.model.toJSON(), this.state);
     },
 
 

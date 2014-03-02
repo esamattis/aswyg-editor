@@ -84,7 +84,7 @@ var Layout = Viewmaster.extend({
                 throw new Error("createNew is not implemented");
             }).then(function() {
                 form.parent.remove();
-            }, errorReporter("Failed to create new page"));
+            }).catch(errorReporter("Failed to create new page"));
 
         });
 
@@ -126,7 +126,7 @@ var Layout = Viewmaster.extend({
         self.model.saveDraft(self.editor.getContent())
         .then(function() {
             self.preview.refresh();
-        }, errorReporter("Failed to save draft"));
+        }).catch(errorReporter("Failed to save draft"));
     }
 
 
