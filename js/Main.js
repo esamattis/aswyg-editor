@@ -16,6 +16,7 @@ var SelectMenu = require("./SelectMenu");
 var TitleForm = require("./TitleForm");
 var errorReporter = require("./errorReporter");
 var Publish = require("./Publish");
+var Notification = require("./Notification");
 
 
 var Layout = Viewmaster.extend({
@@ -118,6 +119,19 @@ var Layout = Viewmaster.extend({
             window.open(self.model.get("draftUrl") , "_blank");
         });
 
+        self.listenTo(self.model, "saveDraft", function(p) {
+            Notification.show("Saving draft...").then(function($el) {
+                p.then(function() {
+                    $el.fadeOut(500, function() {
+                        $el.remove();
+                    });
+                }).catch(function(err) {
+                    $el.text("Failed to save draft: " + errorReporter.format(err));
+                });
+            });
+
+
+        });
 
     },
 

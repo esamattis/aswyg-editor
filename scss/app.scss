@@ -123,6 +123,21 @@ div, html, body, iframe, ul, li, h1, h2, h3 {
     }
 }
 
+.bg-notification {
+    z-index: 10000;
+    position: absolute;
+    top: 5em;
+    right: 2em;
+    background-color: lightgray;
+    color: black;
+    border-radius: 1em;
+    border: 1px solid gray;
+    p {
+        margin: 1em;
+    }
+
+}
+
 @media (max-width: 55em) {
     .bb-toolbar button {
         font-size: 0.7em;
