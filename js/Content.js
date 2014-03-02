@@ -4,6 +4,9 @@ var Backbone = require("backbone");
 var _ = require("underscore");
 
 var Content = Backbone.Model.extend({
+    defaults: {
+        dirty: false
+    },
 
     initialize: function(attrs, opts) {
         var self = this;
@@ -56,11 +59,15 @@ var Content = Backbone.Model.extend({
     reset: function(data) {
         var self = this;
         data = Promise.cast(data);
-        this.trigger("resetStart", data);
-        return data.then(function(data) {
+
+        var done =  data.then(function(data) {
             self.clear({ silent: true });
             self.set(data);
         });
+
+        this.trigger("resetStart", done);
+
+        return done;
     }
 
 

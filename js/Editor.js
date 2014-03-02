@@ -14,7 +14,17 @@ var Editor = Viewmaster.extend({
     template: require("./Editor.hbs"),
 
     initialize: function() {
-        this.model.set("dirty", false, { silent: true });
+
+        var self = this;
+
+        this.bindAutoSaving = _.once(this.bindAutoSaving);
+        this.listenTo(this.model, "resetStart", function(p) {
+            p.then(function() {
+                self.setContentFromModel();
+                self.bindAutoSaving();
+            });
+        });
+
     },
 
     afterTemplate: function() {
@@ -84,23 +94,21 @@ var Editor = Viewmaster.extend({
             self.cm.refresh();
         });
 
-        self.model.initialized.then(function() {
+    },
 
-            self.setContentFromModel();
+    bindAutoSaving: function() {
+        var self = this;
+        self.cm.on("change", function() {
+            self.model.set("dirty", true);
+        });
 
-            self.cm.on("change", function() {
-                self.model.set("dirty", true);
-            });
+        self.cm.on("change", _.debounce(function() {
+            self.save();
+        }, 1000));
 
-            self.cm.on("change", _.debounce(function() {
-                self.save();
-            }, 5000));
-
-            // XXX: listenTo
-            $(window).on("blur", function() {
-                self.save();
-            });
-
+        // XXX: listenTo
+        $(window).on("blur", function() {
+            self.save();
         });
     },
 
