@@ -104,7 +104,7 @@ var Editor = Viewmaster.extend({
 
         self.cm.on("change", _.debounce(function() {
             self.save();
-        }, 1000));
+        }, 1000 * 60));
 
         // XXX: listenTo
         $(window).on("blur", function() {
