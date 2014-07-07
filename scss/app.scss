@@ -189,6 +189,8 @@ $dropdown-menu-color: lightgray;
     .content {
         padding: 1em;
         background-color: white;
+        max-height: 300px;
+        overflow-y: auto;
     }
 
     li {
